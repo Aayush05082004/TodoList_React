@@ -1,17 +1,14 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import CssBaseLine from '@mui/material/CssBaseline'
+import CssBaseline from '@mui/material/CssBaseline'
 import TodoList from './TodoList'
+import Navbar from './Navbar'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <CssBaseLine />
-      <h1>Todos</h1>
+      <CssBaseline />
+      <Navbar />
       <TodoList />
     </>
   )

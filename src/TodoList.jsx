@@ -1,18 +1,23 @@
 import List from '@mui/material/List';
 import TodoItem from './TodoItem';
 import TodoForm from './TodoForm';
-import { useState } from "react"
-const todoList=[
-    {id:1,text:"Walking",completed:false},
-    {id:2,text:"Studying",completed:false},
-    {id:3,text:"Sleeping",completed:false},
-    {id:4,text:"Gyming",completed:true},
-    {id:5,text:"Eating",completed:false},
-]
+import { useState, useEffect } from "react"
+import { Box, Typography } from '@mui/material';
+const todoList= ()=>{
+    try {
+        let data=JSON.parse(localStorage.getItem("todos"))  || [];
+        return data || [];
+    } catch (error) {
+        return [];
+    }
+}
 
 export default function TodoList(){
     const [todos,setTodos]=useState(todoList);
 
+    useEffect(()=>{
+        localStorage.setItem('todos',JSON.stringify(todos));
+    }, [todos])
     const removeTodo=(id)=>{
         setTodos((prevTodo)=>{
             return prevTodo.filter((t)=>t.id!==id)
@@ -28,7 +33,25 @@ export default function TodoList(){
         })
     }
 
+    const addTodo=(text)=>{
+        setTodos(prevTodo=>{
+            return [...prevTodo,{text:text, id: crypto.randomUUID() , completed:false}]
+        })
+    }
     return(
+        <Box 
+        sx={{
+                display:'flex',
+                justifyContent:'center',
+                flexDirection:'column',
+                alignItems:'center',
+                m:4,
+                p:'auto',
+                border:'2px solid black'
+        }}>
+        <Typography variant="h2" component="h1" sx={{ flexGrow: 1 }}>
+            Todos
+          </Typography>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             {/* first way */}
             {todos.map(todo=>{
@@ -39,8 +62,9 @@ export default function TodoList(){
              {todos.map(todo=>{
                 return <TodoItem todo={todo} key={todo.id} />
             })} */}
-            <todoForm />
+            <TodoForm add={addTodo}/>
         </List>
+        </Box>
     )
 
 }
